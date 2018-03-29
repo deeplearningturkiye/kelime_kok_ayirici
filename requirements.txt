@@ -1,0 +1,7 @@
+Flask
+gunicorn
+h5py
+keras
+tensorflow
+pymysql
+requests

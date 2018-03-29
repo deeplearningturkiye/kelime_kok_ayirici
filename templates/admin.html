@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <title>ADMIN - Derin Öğrenme Tabanlı - seq2seq - Türkçe için kelime kökü bulma uygulaması - v0.2</title>
+</head>
+<body class="bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Logs</h2>
+        <button id="btnExport" type="button" class="btn btn-success">Dışa Aktar</button>
+        <table id="tblLogs" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Kullanıcı Girişi</th>
+              <th>Tahmin Sonucu</td>
+                <th>Doğru mu?</th>
+                <th>Kullanıcı Önerisi</th>
+                <th>IP</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Güncelleme Tarihi</th>
+            </tr>
+          </thead>
+        </table>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script src="{{ url_for('static',filename='tabletoCSV.js') }}"></script>
+        <script type="text/javascript">
+          $(document).ready(function () {
+            $('#tblLogs').DataTable({
+              "ajax": '/getAllRecords',
+              "columns": [
+                { "data": "ID" },
+                { "data": "UserInputText" },
+                { "data": "PredictedText" },
+                { "data": "IsTrue" },
+                { "data": "UserSuggestion" },
+                { "data": "IP" },
+                { "data": "CreatedDate" },
+                { "data": "LastModifiedDate" }
+              ],
+              "order": [[0, "desc"]]
+            });
+
+            $("#btnExport").click(function () {
+              $("#tblLogs").tableToCSV();
+            });
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

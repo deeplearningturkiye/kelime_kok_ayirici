@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="tr" xml:lang="tr">
+<head>
+	<meta charset="UTF-8">
+	<title>Derin Öğrenme Tabanlı - seq2seq - Türkçe için kelime kökü bulma uygulaması - v0.2</title>
+	<meta name="theme-color" content="#080059">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body class="bg-light">
+	<main role="main">
+		<div class="jumbotron" style="padding: 1rem 2rem;">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h2>KÖK BULMA (Beta) - v0.2</h2>
+						<div class="loader" style="display:none;"></div>
+
+						<div id="dvResult">
+							<span></span>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+							<label for="InputTxt">Kelime:</label>
+							<input type="text" class="form-control" id="InputTxt" required>
+							<input type="hidden" id="InputHiddenTxt" name="InputHiddenTxt" value="">
+							<small id="help" class="form-text text-muted">Kökünü aradığınız tek bir kelime giriniz</small>
+						</div>
+						<button id="btnPredict" type="button" class="btn btn-primary">KÖK BUL</button>
+						<br>
+						<br>
+						<p style="color:#d50000">NOT: Sistemin gelişmesi için amaca uygun kelimelerin girilmesi ve kök doğru ise doğru olarak işaretlemeyi, yanlış ise
+							doğrusunu girerek göndermeniz çok önemlidir!.
+							<br/>Otomatik olarak eğitim süreci bulunmamaktadır. Önerilen kelimeler belli sayıya ulaştığında sistem yeniden eğitilecektir.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="modalPredictionResult" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Kelime Kökü Tahmini</h5>
+						</div>
+						<div class="modal-body" id="modalPredictionBody">
+							...
+						</div>
+						<div class="modal-footer">
+							<button id="btnTrue" type="button" class="btn btn-success">Doğru</button>
+							<button id="btnFalse" type="button" class="btn btn-warning">GÖNDER</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<h3>Uygulama Hakkında</h3>
+			<p><b>Derin Öğrenme Tabanlı - seq2seq - Türkçe için kelime kökü bulma uygulaması</b></p>
+			<p>Diğer çalışmalardan farklı olarak kural tabanlı bir uygulama değildir. </p>
+			<p>Eğitim için Ahmet Aksoy'un <a href="https://github.com/ahmetax/kalbur/blob/master/veri/KOKBULTEST.txt" target="_blank">kelime kökleri</a> datasından yararlanılmıştır.</p>
+			<p>Önerilerinizi
+				<a href="http://deeplearningturkiye.com/" target="_blank">Deep Learning Türkiye</a> sosyal medya hesaplarımızdan veya
+				<a href="mailto:deeplearningturkiye@gmail.com">deeplearningturkiye@gmail.com</a> e-posta adresinden bizlere ulaştırabilirsiniz. </p>
+			<br>
+			<h3>Geliştiriciler</h3>
+			<p><a href="https://www.linkedin.com/in/yavuzkomecoglu/" target="_blank">Yavuz Kömeçoğlu</a></p>
+			<p><a href="https://www.linkedin.com/in/birol-kuyumcu-53798771/" target="_blank">Birol Kuyumcu</a></p>
+			<p><a href="http://deeplearningturkiye.com/" target="_blank"><img src="{{ url_for('static',filename='dltr_logo_black.png') }}"></a></p>
+		</div>
+	</main>
+	<footer class="footer">
+		<div class="container">
+			<span class="text-muted">Yavuz Kömeçoğlu & Birol Kuyumcu © 2018</span>
+		</div>
+	</footer>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			function predicted() {
+				var word = $('#InputTxt').val();
+				word = word.replace(/"/g, '&quot;');
+
+				$.ajax({
+					type: "POST",
+					url: "/predict/",
+					data: word,
+					success: function (data) {
+						console.log(data.success);
+
+						$("#InputHiddenTxt").val(data["predictions"]["lastRecordID"]);
+						$("#modalPredictionBody").html('"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong><br><input type="text" class="form-control" id="InputUserSuggestion"><small id="help" class="form-text text-muted">Tahmin edilen kök yanlış ise lütfen doğrusunu girerek "Gönder" buttonuna basınız</small>');
+						jQuery("#modalPredictionResult").modal('show');
+
+						$('#dvResult').html('<div class="alert alert-info">"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong></div>');
+					}
+				});
+			}
+
+			function updateRecord(_id, _isTrue, _userSuggestion) {
+				$.ajax({
+					type: "POST",
+					url: "/updateRecord/",
+					data: { _id, _isTrue, _userSuggestion },
+					success: function (data) {
+						console.log(data.success);
+					}
+				});
+			}
+
+			function IsValid() {
+				var input = $('#InputTxt').val();
+				if ((input.length > 1)) {
+					return true;
+				}
+				else {
+					return false;
+				}
+				/*
+				
+				intRegex = /[0-9 -()+]+$/;
+				if ((input.length > 1) || (intRegex.test(input))) {
+					return true;
+				}
+				else {
+					return false;
+				}*/
+			}
+
+			/*
+						$('#InputTxt').keydown(function (e) {
+							if (e.shiftKey || e.ctrlKey || e.altKey) {
+								e.preventDefault();
+							} else {
+								var key = e.which || e.keyCode;
+								console.log(key)
+								if (!((key == 0) || (key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+									e.preventDefault();
+								}
+							}
+						});
+			*/
+
+			$(document).keypress(function (e) {
+				if (e.which == 13) {
+					if (IsValid()) {
+						predicted();
+					}
+					else {
+						$('#dvResult').html('<div class="alert alert-danger">Lütfen geçerli bir kelime giriniz</div>');
+					}
+				}
+
+			});
+
+			$("#btnPredict").click(function () {
+				if (IsValid()) {
+					predicted();
+				}
+				else {
+					$('#dvResult').html('<div class="alert alert-danger">Lütfen geçerli bir kelime giriniz</div>');
+				}
+
+			});
+
+			$("#btnClear").click(function () {
+				$('#InputTxt').val("");
+			});
+
+
+			$("#btnTrue").click(function () {
+				var ID = $('#InputHiddenTxt').val();
+
+				updateRecord(ID, 1, "");
+
+				//clear
+				$('#InputHiddenTxt').val("");
+				$('#InputTxt').val("");
+				$('#dvResult').html('');
+				jQuery("#modalPredictionResult").modal('hide');
+			});
+
+			$("#btnFalse").click(function () {
+				var ID = $('#InputHiddenTxt').val();
+				var UserSuggestion = $('#InputUserSuggestion').val();
+
+				updateRecord(ID, 0, UserSuggestion);
+
+				//clear
+				$('#InputHiddenTxt').val("");
+				$('#InputTxt').val("");
+				$('#dvResult').html('');
+				jQuery("#modalPredictionResult").modal('hide');
+			});
+		});
+	</script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116573557-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-116573557-1');
+	</script>
+</body>
+</html>
