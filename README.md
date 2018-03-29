@@ -1,0 +1,1 @@
+# kelime_kok_ayirici
