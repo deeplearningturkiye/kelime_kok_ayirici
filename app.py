@@ -1,3 +1,14 @@
+#!/usr/bin/python3
+
+"""
+==========================
+Derin Öğrenme Tabanlı - seq2seq - Türkçe için kelime kökü bulma web uygulaması 
+(tr_stemmer)
+==========================
+
+Deep Learning Türkiye topluluğu tarafından hazırlanmıştır.
+"""
+
 # -*- coding: utf-8 -*- 
 from flask import Flask, render_template, request, jsonify
 import json
