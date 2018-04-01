@@ -96,11 +96,16 @@
 					success: function (data) {
 						console.log(data.success);
 
-						$("#InputHiddenTxt").val(data["predictions"]["lastRecordID"]);
-						$("#modalPredictionBody").html('"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong><br><input type="text" class="form-control" id="InputUserSuggestion"><small id="help" class="form-text text-muted">Tahmin edilen kök yanlış ise lütfen doğrusunu girerek "Gönder" buttonuna basınız</small>');
-						jQuery("#modalPredictionResult").modal('show');
+						if(word.match(/^[0-9a-zA-Z]{1,16}$/)){
+							$("#InputHiddenTxt").val(data["predictions"]["lastRecordID"]);
+							$("#modalPredictionBody").html('"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong><br><input type="text" class="form-control" id="InputUserSuggestion"><small id="help" class="form-text text-muted">Tahmin edilen kök yanlış ise lütfen doğrusunu girerek "Gönder" buttonuna basınız</small>');
+							jQuery("#modalPredictionResult").modal('show');
 
-						$('#dvResult').html('<div class="alert alert-info">"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong></div>');
+							$('#dvResult').html('<div class="alert alert-info">"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong></div>');
+						}
+						else{
+							alert("Hatalı Giriş");
+						}
 					}
 				});
 			}
