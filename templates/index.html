@@ -95,11 +95,9 @@
 					data: word,
 					success: function (data) {
 						console.log(data.success);
-
 						$("#InputHiddenTxt").val(data["predictions"]["lastRecordID"]);
 						$("#modalPredictionBody").html('"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong><br><input type="text" class="form-control" id="InputUserSuggestion"><small id="help" class="form-text text-muted">Tahmin edilen kök yanlış ise lütfen doğrusunu girerek "Gönder" buttonuna basınız</small>');
 						jQuery("#modalPredictionResult").modal('show');
-
 						$('#dvResult').html('<div class="alert alert-info">"' + word + '" kelimesinin kökü: <strong>' + data["predictions"]["kok"] + '</strong></div>');
 					}
 				});
@@ -117,10 +115,15 @@
 			}
 
 			function IsValid() {
+<<<<<<< HEAD
 				var input = $.trim($('#InputTxt').val());
 				input_len = input.split(" ").length;
 				//console.log("input_len",input_len);
 				if (input.match(/[a-zA-Z]{1,25}$/) && input_len== 1) {
+=======
+				var input = $('#InputTxt').val();
+				if (input.match(/[a-zA-Z]{1,25}$/)) {
+>>>>>>> cb28cbbede7a3ed345062766e3f424138d52512a
 					return true;
 				}
 				else {
