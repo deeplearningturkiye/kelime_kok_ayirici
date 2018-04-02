@@ -67,6 +67,10 @@ def predict():
 
 	kok = kokBul(userText)
 
+	#check first letter
+	if(kok[:1] != userText[:1]):
+		kok = "bilmiyorum"
+
 	#ger public ip
 	user_ip = str(urlopen('http://ip.42.pl/raw').read()).replace("b'","").replace("'","")
 	print("user_ip",user_ip)
@@ -81,15 +85,15 @@ def predict():
 
 	return jsonify(result)
 
-@app.route('/predictURL/',methods=['GET'])
-def predictURL():
-
-	word = request.args.get('q')
-	print(word)
-
-	kok = kokBul(word)
-
-	return jsonify(kok) #json.dumps(kok, ensure_ascii=False).encode('utf8') #
+#@app.route('/predictURL/',methods=['GET'])
+#def predictURL():
+#
+#	word = request.args.get('q')
+#	print(word)
+#
+#	kok = kokBul(word)
+#
+#	return jsonify(kok) #json.dumps(kok, ensure_ascii=False).encode('utf8') #
 
 
 @app.route('/updateRecord/',methods=['POST'])

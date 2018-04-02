@@ -86,7 +86,7 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			function predicted() {
-				var word = $('#InputTxt').val();
+				var word = $.trim($('#InputTxt').val());
 				word = word.replace(/"/g, '&quot;');
 
 				$.ajax({
@@ -117,8 +117,10 @@
 			}
 
 			function IsValid() {
-				var input = $('#InputTxt').val();
-				if ((input.length > 1)) {
+				var input = $.trim($('#InputTxt').val());
+				input_len = input.split(" ").length;
+				//console.log("input_len",input_len);
+				if (input.match(/[a-zA-Z]{1,25}$/) && input_len== 1) {
 					return true;
 				}
 				else {
@@ -136,17 +138,17 @@
 			}
 
 			/*
-						$('#InputTxt').keydown(function (e) {
-							if (e.shiftKey || e.ctrlKey || e.altKey) {
-								e.preventDefault();
-							} else {
-								var key = e.which || e.keyCode;
-								console.log(key)
-								if (!((key == 0) || (key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
-									e.preventDefault();
-								}
-							}
-						});
+				$('#InputTxt').keydown(function (e) {
+					if (e.shiftKey || e.ctrlKey || e.altKey) {
+						e.preventDefault();
+					} else {
+						var key = e.which || e.keyCode;
+						console.log(key)
+						if (!((key == 0) || (key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+							e.preventDefault();
+						}
+					}
+				});
 			*/
 
 			$(document).keypress(function (e) {
@@ -202,7 +204,6 @@
 			});
 		});
 	</script>
-
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116573557-1"></script>
 	<script>
