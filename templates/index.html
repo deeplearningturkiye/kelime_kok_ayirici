@@ -137,19 +137,13 @@
 				}*/
 			}
 
-			/*
-				$('#InputTxt').keydown(function (e) {
-					if (e.shiftKey || e.ctrlKey || e.altKey) {
-						e.preventDefault();
-					} else {
-						var key = e.which || e.keyCode;
-						console.log(key)
-						if (!((key == 0) || (key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
-							e.preventDefault();
-						}
-					}
-				});
-			*/
+			$('#InputTxt').keydown(function (e) {
+				var key = e.which || e.keyCode;
+				console.log(key)
+				if ((key >= 48 && key <= 57) || key == 60) {
+					e.preventDefault();
+				}
+			});
 
 			$(document).keypress(function (e) {
 				if (e.which == 13) {

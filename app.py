@@ -68,7 +68,7 @@ def predict():
 	kok = kokBul(userText)
 
 	#check first letter
-	if(kok[:1] != userText[:1]):
+	if(kok[:1] != utilities.lower(userText[:1])):
 		kok = "bilmiyorum"
 
 	#ger public ip
