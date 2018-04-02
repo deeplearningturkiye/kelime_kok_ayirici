@@ -119,7 +119,7 @@
 				var input = $.trim($('#InputTxt').val());
 				input_len = input.split(" ").length;
 				//console.log("input_len",input_len);
-				if (input.match(/[a-zA-Z]{1,25}$/) && input_len== 1) {
+				if (input.match(/^[a-zA-Z]{1,25}$/) && input_len==1) {
 =======
 				var input = $('#InputTxt').val();
 				if (input.match(/[a-zA-Z]{1,25}$/)) {
