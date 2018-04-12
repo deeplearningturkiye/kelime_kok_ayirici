@@ -20,6 +20,7 @@ import builtins
 from urllib.request import urlopen
 import utilities
 import db
+import re
 
 #initalize our flask app
 app = Flask(__name__)
@@ -63,6 +64,7 @@ def predict():
 	result = {"success": False}
 
 	userText = request.get_data().decode('utf-8')
+	userText = re.sub('[^a-zA-ZğüşöçİĞÜŞÖÇ]', '', userText)
 	print(userText)
 
 	kok = kokBul(userText)
