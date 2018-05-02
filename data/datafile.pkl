@@ -1,0 +1,12 @@
+(dp0
+S'maxlen'
+p1
+I22
+sS'chars'
+p2
+V :abcdefghijklmnopqrstuvwxyzçöü\u011f\u0131\u015f
+p3
+sS'charlen'
+p4
+I34
+s.
