@@ -5,8 +5,8 @@
 
 Module Name : usage kelime_kok_ayirici 
 Date : Change
-03/02/2017 : initial write
-02/05/2017 : new data file and trained models updated
+03/02/2018 : initial write
+02/05/2018 : new data file and trained models updated
 ...
 """
 
