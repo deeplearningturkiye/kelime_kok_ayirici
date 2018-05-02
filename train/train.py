@@ -4,7 +4,8 @@
 """
 Module Name : kelime_kok_ayirici training 
 Date : Change
-03/02/2017 : initial write
+03/02/2018 : initial write
+02/05/2018 : New data files updated
 ...
 """
 
